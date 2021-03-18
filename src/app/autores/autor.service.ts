@@ -6,8 +6,7 @@ import { Genero } from './genero.enum';
   providedIn: 'root'
 })
 export class AutorService {
-  
-  
+ 
   private autores: Autor[];
 
   constructor() { 
@@ -39,5 +38,9 @@ export class AutorService {
 
   excluir(id: number) {
     this.autores = this.autores.filter(a => a.id !== id);
+  }
+
+  getAutor(id: number): Autor {
+    return this.autores.find(a => a.id === id);
   }
 }
