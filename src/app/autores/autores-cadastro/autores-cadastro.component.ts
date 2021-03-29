@@ -58,4 +58,8 @@ export class AutoresCadastroComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  salvar() {
+    console.log(this.autor);
+  }
 }
