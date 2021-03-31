@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Autor } from '../autor.model';
 import { AutorService } from '../autor.service';
@@ -40,9 +41,11 @@ export class AutoresCadastroComponent implements OnInit {
     'Dezembro',
   ];
 
+  autoresForm: FormGroup;
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private autorService: AutorService
+    private autorService: AutorService,
   ) {
     const id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
     if (id) {
@@ -55,11 +58,24 @@ export class AutoresCadastroComponent implements OnInit {
         genero: Genero.FEMININO,
       };
     }
+
+    this.autoresForm = new FormGroup({
+      nome: new FormControl('', [
+        Validators.required, 
+        Validators.minLength(3),
+        Validators.maxLength(150)
+      ]),
+      
+      dataNascimento: new FormControl(null),
+
+      genero: new FormControl('F', Validators.required)
+    })
   }
 
   ngOnInit() {}
 
   salvar() {
-    console.log(this.autor);
+    console.log('Autor: ', this.autor);
+    console.log('Formulário: ', this.autoresForm.value)
   }
 }
