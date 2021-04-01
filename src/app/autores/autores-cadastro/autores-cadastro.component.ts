@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Autor } from '../autor.model';
 import { AutorService } from '../autor.service';
 import { Genero } from '../genero.enum';
@@ -11,7 +11,6 @@ import { Genero } from '../genero.enum';
   styleUrls: ['./autores-cadastro.component.scss'],
 })
 export class AutoresCadastroComponent implements OnInit {
-  autor: Autor;
   mesesAbreviados = [
     'Jan',
     'Fev',
@@ -41,17 +40,22 @@ export class AutoresCadastroComponent implements OnInit {
     'Dezembro',
   ];
 
+  autorId: number;
   autoresForm: FormGroup;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private autorService: AutorService,
+    private router: Router,
   ) {
     const id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+    
+    let autor;
     if (id) {
-      this.autor = this.autorService.getAutor(id);
+      autor = this.autorService.getAutor(id);
+      this.autorId = id;
     } else {
-      this.autor = {
+      autor = {
         id: null,
         nome: '',
         dataNascimento: null,
@@ -60,22 +64,25 @@ export class AutoresCadastroComponent implements OnInit {
     }
 
     this.autoresForm = new FormGroup({
-      nome: new FormControl('', [
+      nome: new FormControl(autor.nome, [
         Validators.required, 
         Validators.minLength(3),
-        Validators.maxLength(150)
-      ]),
-      
-      dataNascimento: new FormControl(null),
-
-      genero: new FormControl('F', Validators.required)
+        Validators.maxLength(150),  
+      ]),      
+      dataNascimento: new FormControl(autor.dataNascimento),
+      genero: new FormControl(autor.genero, Validators.required)
     })
   }
 
   ngOnInit() {}
 
   salvar() {
-    console.log('Autor: ', this.autor);
-    console.log('Formulário: ', this.autoresForm.value)
+    const autor = {...this.autoresForm.value, id: this.autorId}
+    this.autorService.salvar(autor);
+    this.router.navigate(['autores']);
+  }
+
+  get nome() {
+    return this.autoresForm.get('nome');
   }
 }
