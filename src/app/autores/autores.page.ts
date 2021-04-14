@@ -22,7 +22,16 @@ export class AutoresPage implements OnInit {
   ngOnInit() {}
 
   listar() {
-    this.autores = this.autorService.getAutores();
+    this.autorService
+      .getAutores()
+      .subscribe(
+        (dados) => {
+          this.autores = dados;
+        }, 
+        (erro) => {
+          console.error(erro);
+        }
+      );
   }
 
   confirmarExclusao(autor: Autor) {
