@@ -7,6 +7,8 @@ import { Autor } from './autor.model';
   providedIn: 'root'
 })
 export class AutorService {
+  
+  private url = 'http://localhost:3000/autores';
  
   private autores: Autor[];
 
@@ -15,15 +17,15 @@ export class AutorService {
   ) {}
   
   getAutores(): Observable<Autor[]> {
-    return this.httpClient.get<Autor[]>('http://localhost:3000/autores');
+    return this.httpClient.get<Autor[]>(this.url);
   }
 
   excluir(id: number) {
-    this.autores = this.autores.filter(a => a.id !== id);
+    return this.httpClient.delete(`${this.url}/${id}`);
   }
 
-  getAutor(id: number): Autor {
-    return this.autores.find(a => a.id === id);
+  getAutor(id: number): Observable<Autor> {
+    return this.httpClient.get<Autor>(`${this.url}/${id}`);
   }
 
   private adicionar(autor: Autor)  {
