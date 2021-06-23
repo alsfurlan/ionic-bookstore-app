@@ -85,6 +85,9 @@ export class AutoresCadastroComponent implements OnInit {
 
   salvar() {
     const autor: Autor = {...this.autoresForm.value, id: this.autorId}
+
+    autor.dataNascimento = autor.dataNascimento.toString().split('T')[0];
+    
     this.autorService.salvar(autor).subscribe(
       () => this.router.navigate(['autores']),
       (erro) => {

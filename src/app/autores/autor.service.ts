@@ -8,7 +8,7 @@ import { Autor } from './autor.model';
 })
 export class AutorService {
   
-  private url = 'http://localhost:3000/autores';
+  private url = 'http://localhost:8080/bookstore/api/autores';
 
   constructor(
     private httpClient: HttpClient
